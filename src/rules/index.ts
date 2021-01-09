@@ -1,5 +1,7 @@
-import jsFunctionInWorklet from './js-function-in-worklet';
+import jsFunctionInWorklet from "./js-function-in-worklet";
 
-export default {
-  jsFunctionInWorklet
-}
+const rules = {
+  jsFunctionInWorklet,
+};
+
+export default rules;

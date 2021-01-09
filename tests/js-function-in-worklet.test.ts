@@ -1,21 +1,49 @@
-import { ESLintUtils } from '@typescript-eslint/experimental-utils';
+import path from "path";
+
+import { ESLintUtils } from "@typescript-eslint/experimental-utils";
 
 import rule from "../src/rules/js-function-in-worklet";
 
 const ruleTester = new ESLintUtils.RuleTester({
-  parser: '@typescript-eslint/parser',
+  parser: "@typescript-eslint/parser",
   parserOptions: {
     project: "./tsconfig.eslint.json",
-    tsconfigRootDir: __dirname + "/fixtures",
+    tsconfigRootDir: path.join(__dirname, "fixtures"),
   },
 });
 
-ruleTester.run('js-function-in-worklet', rule, {
+ruleTester.run("js-function-in-worklet", rule, {
   valid: [
     {
-      code: "function foo() { 'worklet'; return true; } foo();",
-      options: []
-    }
+      code: `
+function bar() {
+  "worklet";
+  return true;  
+}
+
+useAnimatedStyle(() => {
+  bar();
+});`,
+    },
   ],
-  invalid: []
+  invalid: [
+    {
+      code: `
+function bar() {
+  return true;  
+}
+
+useAnimatedStyle(() => {
+  bar();
+});`,
+      errors: [
+        {
+          messageId: "JSFunctionInWorkletMessage",
+          data: {
+            name: "bar",
+          },
+        },
+      ],
+    },
+  ],
 });
