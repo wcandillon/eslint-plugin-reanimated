@@ -1,5 +1,5 @@
-import worklets from './worklets';
+import jsFunctionInWorklet from './js-function-in-worklet';
 
 export default {
-  worklets
+  jsFunctionInWorklet
 }
