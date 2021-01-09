@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "prepublish": "tsc",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "lint": "eslint --ext .ts,.tsx . --max-warnings 0",
+    "tsc": "tsc"
   },
   "author": {
     "name": "William Candillon",

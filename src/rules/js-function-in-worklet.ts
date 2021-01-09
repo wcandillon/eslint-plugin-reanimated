@@ -1,20 +1,21 @@
-import { ESLintUtils, TSESTree, } from '@typescript-eslint/experimental-utils';
-import {isFunctionDeclaration, isBlock, isExpressionStatement} from "typescript";
+import { ESLintUtils, TSESTree } from "@typescript-eslint/experimental-utils";
+import {
+  isFunctionDeclaration,
+  isBlock,
+  isExpressionStatement,
+} from "typescript";
 const createRule = ESLintUtils.RuleCreator(
-    name =>
-      `https://github.com/wcandillon/eslint-plugin-reanimated/blob/master/rules/${name}.md`,
+  (name) =>
+    `https://github.com/wcandillon/eslint-plugin-reanimated/blob/master/rules/${name}.md`
 );
-export type Options = [
+export type Options = [];
 
-];
-
-export type MessageIds =
-  | 'JSFunctionInWorklet';
+export type MessageIds = "JSFunctionInWorklet";
 
 export default createRule<Options, MessageIds>({
-  name: 'js-function-in-worklet',
+  name: "js-function-in-worklet",
   meta: {
-    type: 'problem',
+    type: "problem",
     docs: {
       description: "non-worklet functions should be invoked via runOnJS",
       category: "Possible Errors",
@@ -23,8 +24,8 @@ export default createRule<Options, MessageIds>({
     fixable: "code",
     schema: [],
     messages: {
-      JSFunctionInWorklet: "Function is not a worklet. Use runOnJS instead."
-    }
+      JSFunctionInWorklet: "Function is not a worklet. Use runOnJS instead.",
+    },
   },
   defaultOptions: [],
   create: (context) => {
@@ -41,13 +42,15 @@ export default createRule<Options, MessageIds>({
           if (decl.body && isBlock(decl.body)) {
             const statement = decl.body.statements[0];
             if (statement && isExpressionStatement(statement)) {
-              const esNode = parserServices.tsNodeToESTreeNodeMap.get<TSESTree.ExpressionStatement>(statement);
+              const esNode = parserServices.tsNodeToESTreeNodeMap.get<TSESTree.ExpressionStatement>(
+                statement
+              );
               const isWorklet = esNode.directive === "worklet";
-              console.log({isWorklet});
+              console.log({ isWorklet });
             }
           }
         }
-      }
-    }
-  }
-})
+      },
+    };
+  },
+});
