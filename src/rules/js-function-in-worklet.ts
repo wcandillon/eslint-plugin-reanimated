@@ -1,7 +1,6 @@
 import { ESLintUtils, 
   AST_NODE_TYPES,
   TSESTree, } from '@typescript-eslint/experimental-utils';
-import { parseAndGenerateServices } from '@typescript-eslint/typescript-estree';
 
 const createRule = ESLintUtils.RuleCreator(
     name =>
@@ -32,10 +31,15 @@ export default createRule<Options, MessageIds>({
   },
   defaultOptions: [],
   create: (context) => {
-    console.log({ context });
+    const sourceCode = context.getSourceCode();
+    const parserServices = ESLintUtils.getParserServices(context);
+    const checker = parserServices.program.getTypeChecker();
+    const compilerOptions = parserServices.program.getCompilerOptions();
     return {
       CallExpression: (node) => {
-        console.log({ node });
+        const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
+        const t = checker.getTypeAtLocation(tsNode);
+        console.log({ t });
       }
     }
   }
