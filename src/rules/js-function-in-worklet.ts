@@ -57,21 +57,22 @@ export default createRule<Options, MessageIds>({
     const checker = parserServices.program.getTypeChecker();
     // const compilerOptions = parserServices.program.getCompilerOptions();
     const calleeIsWorklet = (tsNode: CallExpression) => {
-      const symbol = checker.getSymbolAtLocation(tsNode);
-      if (symbol) {
-        const declarations = symbol.getDeclarations();
-        const d = declarations?.[0] ?? null;
-        console.log({ d });
-      }
       const signature = checker.getResolvedSignature(tsNode);
       const decl = signature?.declaration;
       if (decl !== undefined && isFunctionTypeNode(decl)) {
+        //const r = checker.getResolvedSignature(tsNode.parent.ki);
+        const { parent } = decl;
+        if (
+          isFunctionDeclaration(parent) &&
+          parent.name?.getText() === "createWorklet"
+        ) {
+          return true;
+        }
         const tags = getJSDocTags(decl);
         return (
           tags.filter((tag) => tag.tagName.getText() === "worklet").length > 0
         );
-      }
-      if (
+      } else if (
         decl !== undefined &&
         (isFunctionDeclaration(decl) || isArrowFunction(decl))
       ) {

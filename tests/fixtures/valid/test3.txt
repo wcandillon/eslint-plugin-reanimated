@@ -1,0 +1,17 @@
+import {createWorklet} from "react-native-reanimated";
+
+/*
+function bar() {
+  "worklet";
+  return true;  
+}
+*/
+
+const foo = createWorklet(() => {
+  return false;
+});
+
+useAnimatedStyle(() => {
+ // bar();
+  foo();
+});
