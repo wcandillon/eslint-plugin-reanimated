@@ -1,6 +1,16 @@
 
-function bar() {
+const bar = () => {
   return true;  
+};
+
+const foo = () => {
+  "worklet";
+  return false;
+}
+
+function hello() {
+  "worklet";
+  return true;
 }
 
 useAnimatedStyle(() => {
@@ -9,4 +19,6 @@ useAnimatedStyle(() => {
 
 useAnimatedReaction(() => 1, () => {
   bar();
+  foo();
+  hello();
 });

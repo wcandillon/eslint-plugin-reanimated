@@ -3,6 +3,12 @@ function bar() {
   return true;  
 }
 
+const foo = () => {
+  "worklet";
+  return false;
+}
+
 useAnimatedStyle(() => {
   bar();
+  foo();
 });

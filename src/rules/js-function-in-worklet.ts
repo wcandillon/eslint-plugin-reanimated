@@ -3,6 +3,11 @@ import {
   isFunctionDeclaration,
   isBlock,
   isExpressionStatement,
+  CallExpression,
+  isFunctionTypeNode,
+  getJSDocTags,
+  isVariableDeclaration,
+  isArrowFunction,
 } from "typescript";
 const createRule = ESLintUtils.RuleCreator(
   (name) =>
@@ -48,15 +53,29 @@ export default createRule<Options, MessageIds>({
   },
   defaultOptions: [],
   create: (context) => {
-    //const sourceCode = context.getSourceCode();
+    // const sourceCode = context.getSourceCode();
     const parserServices = ESLintUtils.getParserServices(context);
     const checker = parserServices.program.getTypeChecker();
-    //const compilerOptions = parserServices.program.getCompilerOptions();
-    const calleeIsWorklet = (node: TSESTree.CallExpression) => {
-      const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
+    // const compilerOptions = parserServices.program.getCompilerOptions();
+    const calleeIsWorklet = (tsNode: CallExpression) => {
+      const symbol = checker.getSymbolAtLocation(tsNode);
+      if (symbol) {
+        const declarations = symbol.getDeclarations();
+        const d = declarations?.[0] ?? null;
+        console.log({ d });
+      }
       const signature = checker.getResolvedSignature(tsNode);
       const decl = signature?.declaration;
-      if (decl !== undefined && isFunctionDeclaration(decl)) {
+      if (decl !== undefined && isFunctionTypeNode(decl)) {
+        const tags = getJSDocTags(decl);
+        return (
+          tags.filter((tag) => tag.tagName.getText() === "worklet").length > 0
+        );
+      }
+      if (
+        decl !== undefined &&
+        (isFunctionDeclaration(decl) || isArrowFunction(decl))
+      ) {
         if (decl.body && isBlock(decl.body)) {
           const [statement] = decl.body.statements;
           if (statement && isExpressionStatement(statement)) {
@@ -78,9 +97,10 @@ export default createRule<Options, MessageIds>({
         callerIsWorklet = false;
       },
       CallExpression: (node) => {
-        const { name } = node.callee as TSESTree.Identifier;
+        const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
+        const name = tsNode.expression.getText();
         if (callerIsWorklet) {
-          if (!calleeIsWorklet(node)) {
+          if (!calleeIsWorklet(tsNode)) {
             context.report({
               messageId: "JSFunctionInWorkletMessage",
               node,

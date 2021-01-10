@@ -51,7 +51,7 @@ ruleTester.run("js-function-in-worklet", rule, {
         {
           messageId: "JSFunctionInWorkletMessage",
           data: {
-            name: "bar",
+            name: "mix",
           },
         },
       ],
