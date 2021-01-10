@@ -23,9 +23,9 @@ jobs:
       uses: Borales/actions-yarn@v2.3.0
     - name: yarn install, build, and test
       run: |
-        yarn install --cwd functions
         yarn lint
         yarn tsc
+        yarn test
     - name: Deploy
       if: github.ref == 'refs/heads/master'
       run: |  
