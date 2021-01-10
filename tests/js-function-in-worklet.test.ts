@@ -35,8 +35,19 @@ function bar() {
 
 useAnimatedStyle(() => {
   bar();
-});`,
+});
+
+useAnimatedReaction(() => 1, () => {
+  bar();
+});
+`,
       errors: [
+        {
+          messageId: "JSFunctionInWorkletMessage",
+          data: {
+            name: "bar",
+          },
+        },
         {
           messageId: "JSFunctionInWorkletMessage",
           data: {

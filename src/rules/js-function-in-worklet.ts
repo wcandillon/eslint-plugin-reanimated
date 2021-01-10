@@ -3,7 +3,6 @@ import {
   isFunctionDeclaration,
   isBlock,
   isExpressionStatement,
-  Identifier,
 } from "typescript";
 const createRule = ESLintUtils.RuleCreator(
   (name) =>
@@ -26,6 +25,8 @@ const functionHooks = new Map([
   ["withDecay", [1]],
   ["withRepeat", [3]],
 ]);
+const functionNames = Array.from(functionHooks.keys());
+const matchFunctions = `/${functionNames.join("|")}/`;
 
 const JSFunctionInWorkletMessage =
   "{{name}} is not a worklet. Use runOnJS instead.";
@@ -70,10 +71,10 @@ export default createRule<Options, MessageIds>({
     };
     let callerIsWorklet = false;
     return {
-      "CallExpression[callee.name='useAnimatedStyle'] > ArrowFunctionExpression": () => {
+      [`CallExpression[callee.name=${matchFunctions}] > ArrowFunctionExpression`]: () => {
         callerIsWorklet = true;
       },
-      "CallExpression[callee.name='useAnimatedStyle'] > ArrowFunctionExpression:exit": () => {
+      [`CallExpression[callee.name=${matchFunctions}] > ArrowFunctionExpression:exit`]: () => {
         callerIsWorklet = false;
       },
       CallExpression: (node) => {
