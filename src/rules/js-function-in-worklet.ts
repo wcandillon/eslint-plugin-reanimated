@@ -6,7 +6,6 @@ import {
   CallExpression,
   isFunctionTypeNode,
   getJSDocTags,
-  isVariableDeclaration,
   isArrowFunction,
 } from "typescript";
 const createRule = ESLintUtils.RuleCreator(

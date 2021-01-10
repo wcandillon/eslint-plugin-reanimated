@@ -3778,10 +3778,10 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
-react-native-redash@^16.0.5:
-  version "16.0.5"
-  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-16.0.5.tgz#4f34b2b25fd2c30cd6852c97eeddeaa1e2911efc"
-  integrity sha512-anRgwjMCqXBhOm2kwT0IuYTwpEj9xCPlcqtGo8BvoW2uBJnYklvZQXEb2oFeuZWIwn9or5qWKS4wwCss8nbTdA==
+react-native-redash@^16.0.6:
+  version "16.0.6"
+  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-16.0.6.tgz#7f2bd9b93cd1dd2dafef6c4277014e97e7efb495"
+  integrity sha512-03OvoJq1ow2886/Ipv6F18gQE1yhqTLWDwmDWzorT1+5DVfz429Z5G5R/e9q2hNKPfBkDp0+hAC4uc8K6t2EvQ==
   dependencies:
     abs-svg-path "^0.1.1"
     normalize-svg-path "^1.0.1"
