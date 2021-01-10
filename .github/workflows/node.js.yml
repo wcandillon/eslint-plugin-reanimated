@@ -1,11 +1,13 @@
-name: Node CI
-
+name: CI & CD
 on: [push]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     strategy:
       matrix:
@@ -18,11 +20,15 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: GitHub Action for Yarn
-      uses: Borales/actions-yarn@v2.3.0
-    - name: npm install, build, and test
+      uses: Borales/actions-yarn@v2.0.1
+    - name: yarn install, build, and test
       run: |
+        yarn install --cwd functions
         yarn lint
         yarn tsc
-        yarn test
+    - name: Deploy
+      if: github.ref == 'refs/heads/master'
+      run: |  
+        yarn semantic-release
       env:
         CI: true
