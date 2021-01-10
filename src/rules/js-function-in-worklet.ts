@@ -10,7 +10,11 @@ import {
   isMethodDeclaration,
   isPropertyAccessExpression,
   SymbolFlags,
+  isFunctionDeclaration,
   isMethodSignature,
+  isInterfaceDeclaration,
+  isSourceFile,
+  isModuleBlock,
   isInterfaceDeclaration,
 } from "typescript";
 const createRule = ESLintUtils.RuleCreator(
@@ -37,6 +41,7 @@ const functionHooks = new Map([
 const builtInFunctions = [
   "Array",
   "ArrayConstructor",
+  "Date",
   "DateConstructor",
   "Function",
   "Math",
@@ -47,17 +52,6 @@ const builtInFunctions = [
   "RegExpConstructor",
   "String",
   "StringConstructor",
-];
-const reanimatedWorklets = [
-  "withDecay",
-  "withTiming",
-  "withSpring",
-  "withRepeat",
-  "withSequence",
-  "interpolateColor",
-  "interpolate",
-  "measure",
-  "scrollTo",
 ];
 const functionNames = Array.from(functionHooks.keys());
 const matchFunctions = `/${functionNames.join("|")}/`;
@@ -164,9 +158,16 @@ export default createRule<Options, MessageIds>({
           builtInFunctions.indexOf(declaration.parent.name.getText()) !== -1
         ) {
           return;
+        } else if (
+          declaration &&
+          isFunctionDeclaration(declaration) &&
+          isModuleBlock(declaration.parent) &&
+          declaration.parent.parent.name.getText() === "Animated"
+        ) {
+          return;
         }
 
-        if (reanimatedWorklets.indexOf(name) === -1 && callerIsWorklet) {
+        if (callerIsWorklet) {
           if (!calleeIsWorklet(tsNode)) {
             context.report({
               messageId: "JSFunctionInWorkletMessage",

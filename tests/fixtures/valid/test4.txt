@@ -24,8 +24,8 @@ const Camera = ({ camera, canvas }: CameraProps) => {
   >({
     onStart: (e, ctx) => {
       Object.keys({});
-      //const date = new Date();
-      //date.getTime();
+      const date = new Date();
+      date.getTime();
       ctx.x = x.value;
       ctx.y = y.value;
     },
