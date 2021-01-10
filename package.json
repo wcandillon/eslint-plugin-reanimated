@@ -8,7 +8,8 @@
     "test": "jest --coverage",
     "lint": "eslint --ext .ts,.tsx . --max-warnings 0",
     "tsc": "tsc",
-    "ci": "yarn lint && yarn tsc && yarn test"
+    "ci": "yarn lint && yarn tsc && yarn test",
+    "semantic-release": "semantic-release"
   },
   "author": {
     "name": "William Candillon",
@@ -21,10 +22,15 @@
     "react-native-reanimated": "2.0.0-rc.1",
     "react-native-redash": "^16.0.6",
     "ts-jest": "^26.4.4",
-    "eslint-config-react-native-wcandillon": "^3.3.6"
+    "eslint-config-react-native-wcandillon": "^3.3.6",
+    "semantic-release": "^17.3.1"
   },
   "dependencies": {
     "eslint": "^7.17.0",
     "typescript": "^4.1.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wcandillon/eslint-plugin-reanimated.git"
   }
 }
