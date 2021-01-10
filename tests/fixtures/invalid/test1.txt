@@ -1,0 +1,12 @@
+
+function bar() {
+  return true;  
+}
+
+useAnimatedStyle(() => {
+  bar();
+});
+
+useAnimatedReaction(() => 1, () => {
+  bar();
+});

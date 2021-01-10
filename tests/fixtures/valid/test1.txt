@@ -1,0 +1,8 @@
+function bar() {
+  "worklet";
+  return true;  
+}
+
+useAnimatedStyle(() => {
+  bar();
+});

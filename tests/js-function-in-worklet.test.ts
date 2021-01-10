@@ -1,4 +1,5 @@
 import path from "path";
+import fs from "fs";
 
 import { ESLintUtils } from "@typescript-eslint/experimental-utils";
 
@@ -12,35 +13,18 @@ const ruleTester = new ESLintUtils.RuleTester({
   },
 });
 
+const code = (name: string) =>
+  fs.readFileSync(path.join(__dirname, name), "utf8");
+
 ruleTester.run("js-function-in-worklet", rule, {
   valid: [
     {
-      code: `
-function bar() {
-  "worklet";
-  return true;  
-}
-
-useAnimatedStyle(() => {
-  bar();
-});`,
+      code: code("fixtures/valid/test1.txt"),
     },
   ],
   invalid: [
     {
-      code: `
-function bar() {
-  return true;  
-}
-
-useAnimatedStyle(() => {
-  bar();
-});
-
-useAnimatedReaction(() => 1, () => {
-  bar();
-});
-`,
+      code: code("fixtures/invalid/test1.txt"),
       errors: [
         {
           messageId: "JSFunctionInWorkletMessage",
