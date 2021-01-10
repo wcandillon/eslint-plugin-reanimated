@@ -1,0 +1,13 @@
+const bar = () => {
+  return true;
+}
+
+function hello() {
+  "worklet";
+  bar();
+}
+
+const world = () => {
+  "worklet";
+  bar();
+}

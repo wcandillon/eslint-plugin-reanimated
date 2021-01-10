@@ -88,8 +88,27 @@ export default createRule<Options, MessageIds>({
       }
       return false;
     };
+    let currentCodePath: string | null = null;
     let callerIsWorklet = false;
     return {
+      onCodePathStart: (codePath, node) => {
+        if (
+          (node.type === "ArrowFunctionExpression" ||
+            node.type === "FunctionDeclaration") &&
+          node.body.type === "BlockStatement" &&
+          node.body.body.length > 0 &&
+          node.body.body[0]?.directive === "worklet"
+        ) {
+          currentCodePath = codePath.id;
+          callerIsWorklet = true;
+        }
+      },
+      onCodePathEnd: (codePath, node) => {
+        if (codePath.id === currentCodePath) {
+          currentCodePath = null;
+          callerIsWorklet = false;
+        }
+      },
       [`CallExpression[callee.name=${matchFunctions}] > ArrowFunctionExpression`]: () => {
         callerIsWorklet = true;
       },
