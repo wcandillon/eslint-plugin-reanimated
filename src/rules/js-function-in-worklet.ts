@@ -7,22 +7,17 @@ import {
   isFunctionTypeNode,
   getJSDocTags,
   isArrowFunction,
-  isMethodDeclaration,
-  isPropertyAccessExpression,
-  SymbolFlags,
-  isFunctionDeclaration,
   isMethodSignature,
-  isInterfaceDeclaration,
-  isSourceFile,
   isModuleBlock,
   isInterfaceDeclaration,
 } from "typescript";
+export type Options = [];
+export type MessageIds = "JSFunctionInWorkletMessage";
+
 const createRule = ESLintUtils.RuleCreator(
   (name) =>
     `https://github.com/wcandillon/eslint-plugin-reanimated/blob/master/rules/${name}.md`
 );
-export type Options = [];
-export type MessageIds = "JSFunctionInWorkletMessage";
 
 const functionHooks = new Map([
   ["useAnimatedStyle", [0]],
@@ -115,19 +110,22 @@ export default createRule<Options, MessageIds>({
     let currentCodePath: string | null = null;
     let callerIsWorklet = false;
     return {
-      onCodePathStart: (codePath, node) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onCodePathStart: (...args: any[]) => {
+        const [codePath, node] = args;
         if (
           (node.type === "ArrowFunctionExpression" ||
             node.type === "FunctionDeclaration") &&
           node.body.type === "BlockStatement" &&
           node.body.body.length > 0 &&
-          node.body.body[0]?.directive === "worklet"
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (node.body.body as any[])[0]?.directive === "worklet"
         ) {
           currentCodePath = codePath.id;
           callerIsWorklet = true;
         }
       },
-      onCodePathEnd: (codePath, node) => {
+      onCodePathEnd: (codePath: { id: string }) => {
         if (codePath.id === currentCodePath) {
           currentCodePath = null;
           callerIsWorklet = false;
