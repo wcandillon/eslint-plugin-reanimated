@@ -1,0 +1,5 @@
+import {mix} from "react-native-redash";
+
+useAnimatedStyle(() => {
+  mix(1, 0, 1);
+});
