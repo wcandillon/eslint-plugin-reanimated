@@ -7,6 +7,11 @@ import {
   isFunctionTypeNode,
   getJSDocTags,
   isArrowFunction,
+  isMethodDeclaration,
+  isPropertyAccessExpression,
+  SymbolFlags,
+  isMethodSignature,
+  isInterfaceDeclaration,
 } from "typescript";
 const createRule = ESLintUtils.RuleCreator(
   (name) =>
@@ -29,6 +34,31 @@ const functionHooks = new Map([
   ["withDecay", [1]],
   ["withRepeat", [3]],
 ]);
+const builtInFunctions = [
+  "Array",
+  "ArrayConstructor",
+  "DateConstructor",
+  "Function",
+  "Math",
+  "NumberConstructor",
+  "ObjectConstructor",
+  "ReadonlyArray",
+  "RegExp",
+  "RegExpConstructor",
+  "String",
+  "StringConstructor",
+];
+const reanimatedWorklets = [
+  "withDecay",
+  "withTiming",
+  "withSpring",
+  "withRepeat",
+  "withSequence",
+  "interpolateColor",
+  "interpolate",
+  "measure",
+  "scrollTo",
+];
 const functionNames = Array.from(functionHooks.keys());
 const matchFunctions = `/${functionNames.join("|")}/`;
 
@@ -109,6 +139,12 @@ export default createRule<Options, MessageIds>({
           callerIsWorklet = false;
         }
       },
+      ["CallExpression[callee.name='useAnimatedGestureHandler'] > ObjectExpression"]: () => {
+        callerIsWorklet = true;
+      },
+      ["CallExpression[callee.name='useAnimatedGestureHandler'] > ObjectExpression:exit"]: () => {
+        callerIsWorklet = false;
+      },
       [`CallExpression[callee.name=${matchFunctions}] > ArrowFunctionExpression`]: () => {
         callerIsWorklet = true;
       },
@@ -117,8 +153,20 @@ export default createRule<Options, MessageIds>({
       },
       CallExpression: (node) => {
         const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
-        const name = tsNode.expression.getText();
-        if (callerIsWorklet) {
+        const { expression } = tsNode;
+        const name = expression.getText();
+        const signature = checker.getResolvedSignature(tsNode);
+        const declaration = signature?.declaration;
+        if (
+          declaration &&
+          isMethodSignature(declaration) &&
+          isInterfaceDeclaration(declaration.parent) &&
+          builtInFunctions.indexOf(declaration.parent.name.getText()) !== -1
+        ) {
+          return;
+        }
+
+        if (reanimatedWorklets.indexOf(name) === -1 && callerIsWorklet) {
           if (!calleeIsWorklet(tsNode)) {
             context.report({
               messageId: "JSFunctionInWorkletMessage",

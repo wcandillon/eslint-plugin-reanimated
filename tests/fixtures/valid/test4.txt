@@ -1,0 +1,48 @@
+import React from "react";
+import { StyleSheet } from "react-native";
+import {
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent,
+} from "react-native-gesture-handler";
+import Animated, {
+  useAnimatedGestureHandler,
+  useSharedValue,
+  withDecay,
+  useAnimatedReaction,
+} from "react-native-reanimated";
+import {toRad} from "react-native-redash";
+
+const Camera = ({ camera, canvas }: CameraProps) => {
+  const x = useSharedValue(0);
+  const y = useSharedValue(0);
+  const onGestureEvent = useAnimatedGestureHandler<
+    PanGestureHandlerGestureEvent,
+    {
+      x: number;
+      y: number;
+    }
+  >({
+    onStart: (e, ctx) => {
+      Object.keys({});
+      //const date = new Date();
+      //date.getTime();
+      ctx.x = x.value;
+      ctx.y = y.value;
+    },
+    onActive: ({ translationX, translationY }, ctx) => {
+      x.value = ctx.x + toRad(translationX, canvas.x);
+      y.value = ctx.y + toRad(translationY, canvas.y);
+    },
+    onEnd: ({ velocityX, velocityY }) => {
+      x.value = withDecay({
+        velocity: velocityX,
+      });
+      y.value = withDecay({
+        velocity: velocityY,
+      });
+    },
+  });
+  return null;
+};
+
+export default Camera;
