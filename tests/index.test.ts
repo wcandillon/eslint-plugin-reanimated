@@ -9,7 +9,7 @@ describe('eslint-plugin ("./src/index.ts")', () => {
   const ruleKeys = Object.keys({ jsFunctionInWorklet: true }).map((rule) =>
     camelToUnderscore(rule)
   );
-  const eslintPluginRuleKeys = Object.keys(eslintPlugin.rules);
+  const eslintPluginRuleKeys = Object.keys(eslintPlugin);
 
   it("exports all available rules", () => {
     expect(ruleKeys).toEqual(expect.arrayContaining(eslintPluginRuleKeys));
