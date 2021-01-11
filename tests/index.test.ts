@@ -1,5 +1,4 @@
 import eslintPlugin from "../src";
-import rules from "../src/rules";
 
 function camelToUnderscore(key: string) {
   const result = key.replace(/([A-Z])/g, " $1");
@@ -7,7 +6,9 @@ function camelToUnderscore(key: string) {
 }
 
 describe('eslint-plugin ("./src/index.ts")', () => {
-  const ruleKeys = Object.keys(rules).map((rule) => camelToUnderscore(rule));
+  const ruleKeys = Object.keys({ jsFunctionInWorklet: true }).map((rule) =>
+    camelToUnderscore(rule)
+  );
   const eslintPluginRuleKeys = Object.keys(eslintPlugin.rules);
 
   it("exports all available rules", () => {

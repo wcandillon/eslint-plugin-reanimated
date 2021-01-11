@@ -1,7 +1,7 @@
 {
   "name": "eslint-plugin-reanimated",
-  "version": "0.0.0-development",
-  "main": "dist/index.js",
+  "version": "1.0.0",
+  "main": "dist/src/index.js",
   "license": "MIT",
   "scripts": {
     "prepublish": "tsc",
