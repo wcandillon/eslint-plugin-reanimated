@@ -1,7 +1,6 @@
-import { jsFunctionInWorklet } from "./rules";
+import rules from "./rules";
 
-const rules = {
-  "js-function-in-worklet": jsFunctionInWorklet,
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {
+  rules,
 };
-
-export default rules;

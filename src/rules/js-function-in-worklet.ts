@@ -14,10 +14,10 @@ import {
 export type Options = [];
 export type MessageIds = "JSFunctionInWorkletMessage";
 
-const createRule = ESLintUtils.RuleCreator(
-  (name) =>
-    `https://github.com/wcandillon/eslint-plugin-reanimated/blob/master/rules/${name}.md`
-);
+const createRule = ESLintUtils.RuleCreator((name) => {
+  console.log({ name });
+  return `https://github.com/wcandillon/eslint-plugin-reanimated/blob/master/rules/${name}.md`;
+});
 
 const functionHooks = new Map([
   ["useAnimatedStyle", [0]],
@@ -53,6 +53,7 @@ const matchFunctions = `/${functionNames.join("|")}/`;
 
 const JSFunctionInWorkletMessage =
   "{{name}} is not a worklet. Use runOnJS instead.";
+
 export default createRule<Options, MessageIds>({
   name: "js-function-in-worklet",
   meta: {
