@@ -8,10 +8,10 @@ import rule from "../src/rules/js-function-in-worklet";
 const ruleTester = new ESLintUtils.RuleTester({
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 6,
     project: "./tsconfig.eslint.json",
     tsconfigRootDir: path.join(__dirname, "fixtures"),
     sourceType: "module",
+    ecmaVersion: 6,
   },
 });
 
@@ -87,6 +87,17 @@ ruleTester.run("js-function-in-worklet", rule, {
           messageId: "JSFunctionInWorkletMessage",
           data: {
             name: "objectKeys",
+          },
+        },
+      ],
+    },
+    {
+      code: code("fixtures/invalid/test6.txt"),
+      errors: [
+        {
+          messageId: "JSFunctionInWorkletMessage",
+          data: {
+            name: "origin2",
           },
         },
       ],
