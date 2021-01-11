@@ -5,6 +5,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# docz
+.docz
+
 # Runtime data
 pids
 *.pid
@@ -36,6 +39,9 @@ build/Release
 node_modules/
 jspm_packages/
 
+# TypeScript v1 declaration files
+typings/
+
 # Optional npm cache directory
 .npm
 
@@ -57,13 +63,5 @@ jspm_packages/
 # next.js build output
 .next
 
-
-# Editor-specific metadata folders
-.vs
-
-.DS_Store
-.idea
-dist
-_ts3.4
-*.tsbuildinfo
-.watchmanconfig
+# build
+dist/
