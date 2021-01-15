@@ -1,3 +1,5 @@
+const mix = (v, x, y) => v;
+
 useAnimatedStyle(() => {
   mix(1, 0, 1);
 });

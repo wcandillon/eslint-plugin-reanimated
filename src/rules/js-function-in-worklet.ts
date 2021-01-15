@@ -167,6 +167,8 @@ export default createRule<Options, MessageIds>({
           declaration.parent.parent.name.getText() === "Animated"
         ) {
           return;
+        } else if (declaration === undefined) {
+          return;
         }
 
         if (callerIsWorklet) {
