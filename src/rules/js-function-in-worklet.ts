@@ -1,4 +1,4 @@
-import { ESLintUtils, TSESTree } from "@typescript-eslint/experimental-utils";
+import { ESLintUtils } from "@typescript-eslint/experimental-utils";
 import {
   isFunctionDeclaration,
   isBlock,
@@ -97,13 +97,11 @@ export default createRule<Options, MessageIds>({
         if (decl.body && isBlock(decl.body)) {
           const [statement] = decl.body.statements;
           if (statement && isExpressionStatement(statement)) {
-            const esNode = parserServices.tsNodeToESTreeNodeMap.get<TSESTree.ExpressionStatement>(
-              statement
+            return (
+              statement.expression
+                .getText()
+                .substring(1, "worklet".length + 1) === "worklet"
             );
-            if (!esNode) {
-              throw new Error("ESNode not found: " + statement.getText());
-            }
-            return esNode.directive === "worklet";
           }
         }
       }
