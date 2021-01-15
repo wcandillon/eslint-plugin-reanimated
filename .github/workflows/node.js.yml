@@ -6,10 +6,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
     strategy:
       matrix:
         node-version: [12.x]
@@ -33,3 +29,5 @@ jobs:
         yarn semantic-release
       env:
         CI: true
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
