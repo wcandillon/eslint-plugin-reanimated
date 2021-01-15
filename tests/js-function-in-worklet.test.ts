@@ -11,7 +11,9 @@ const ruleTester = new ESLintUtils.RuleTester({
     project: "./tsconfig.eslint.json",
     tsconfigRootDir: path.join(__dirname, "fixtures"),
     sourceType: "module",
-    ecmaVersion: 6,
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
 });
 

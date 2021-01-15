@@ -1,3 +1,5 @@
+import { stat } from "fs/promises";
+
 import { ESLintUtils, TSESTree } from "@typescript-eslint/experimental-utils";
 import {
   isFunctionDeclaration,
@@ -100,6 +102,9 @@ export default createRule<Options, MessageIds>({
             const esNode = parserServices.tsNodeToESTreeNodeMap.get<TSESTree.ExpressionStatement>(
               statement
             );
+            if (!esNode) {
+              throw new Error("ESNode not found: " + statement.getText());
+            }
             return esNode.directive === "worklet";
           }
         }
