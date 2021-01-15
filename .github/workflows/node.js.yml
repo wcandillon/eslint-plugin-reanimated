@@ -25,7 +25,7 @@ jobs:
         yarn test
     - name: Deploy
       if: github.ref == 'refs/heads/master'
-      run: yarn semantic-release
+      run: npx semantic-release
       env:
         CI: true
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
