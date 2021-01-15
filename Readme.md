@@ -1,4 +1,4 @@
-![CI & CD](https://github.com/wcandillon/eslint-plugin-reanimated/workflows/CI%20&%20CD/badge.svg)
+[![CI & CD](https://github.com/wcandillon/eslint-plugin-reanimated/workflows/CI%20&%20CD/badge.svg)](https://github.com/wcandillon/eslint-plugin-reanimated/actions?query=branch%3Amaster)
 
 # Installation
 
