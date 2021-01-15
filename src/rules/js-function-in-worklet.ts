@@ -79,7 +79,6 @@ export default createRule<Options, MessageIds>({
       const signature = checker.getResolvedSignature(tsNode);
       const decl = signature?.declaration;
       if (decl !== undefined && isFunctionTypeNode(decl)) {
-        //const r = checker.getResolvedSignature(tsNode.parent.ki);
         const { parent } = decl;
         if (
           isFunctionDeclaration(parent) &&
