@@ -1,5 +1,3 @@
-import { stat } from "fs/promises";
-
 import { ESLintUtils, TSESTree } from "@typescript-eslint/experimental-utils";
 import {
   isFunctionDeclaration,
