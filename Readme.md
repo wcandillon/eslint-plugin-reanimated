@@ -1,6 +1,6 @@
 [![NPM](https://img.shields.io/npm/v/eslint-plugin-reanimated)](https://www.npmjs.com/package/eslint-plugin-reanimated) [![CI & CD](https://github.com/wcandillon/eslint-plugin-reanimated/workflows/CI%20&%20CD/badge.svg)](https://github.com/wcandillon/eslint-plugin-reanimated/actions?query=branch%3Amaster)
 
-This plugin checks if functions that live on the JS thread are being invoked directly on the UI thread.
+The goal of this plugin is to help you when writing animation worklets with Reanimated.
 
 ## Installation
 
