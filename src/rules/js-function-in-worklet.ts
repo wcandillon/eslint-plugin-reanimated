@@ -163,6 +163,14 @@ export default createRule<Options, MessageIds>({
           return;
         } else if (
           declaration &&
+          isFunctionTypeNode(declaration) &&
+          isFunctionDeclaration(declaration.parent) &&
+          isModuleBlock(declaration.parent.parent) &&
+          declaration.parent.parent.parent.name.getText() === "Animated"
+        ) {
+          return;
+        } else if (
+          declaration &&
           isFunctionDeclaration(declaration) &&
           isModuleBlock(declaration.parent) &&
           declaration.parent.parent.name.getText() === "Animated"
