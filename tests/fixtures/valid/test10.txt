@@ -1,0 +1,7 @@
+import {useDerivedValue, Easing} from "react-native-reanimated";
+
+const part1 = useDerivedValue(() =>
+  Easing.inOut(Easing.ease)(
+    interpolate(progressRaw.value, [0, 0.75], [0, 1], Extrapolate.CLAMP)
+  )
+);

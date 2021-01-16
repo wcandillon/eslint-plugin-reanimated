@@ -1,6 +1,7 @@
 import { ESLintUtils } from "@typescript-eslint/experimental-utils";
 import { Scope } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
 import {
+  Node,
   isFunctionDeclaration,
   isBlock,
   isExpressionStatement,
@@ -10,7 +11,7 @@ import {
   isArrowFunction,
   isMethodSignature,
   isModuleBlock,
-  isInterfaceDeclaration,
+  isSourceFile,
 } from "typescript";
 export type Options = [];
 export type MessageIds = "JSFunctionInWorkletMessage";
@@ -33,23 +34,7 @@ const functionHooks = new Map([
   ["withDecay", [1]],
   ["withRepeat", [3]],
 ]);
-const builtInFunctions = [
-  "Array",
-  "ArrayConstructor",
-  "Date",
-  "DateConstructor",
-  "Function",
-  "Math",
-  "NumberConstructor",
-  "ObjectConstructor",
-  "ReadonlyArray",
-  "RegExp",
-  "RegExpConstructor",
-  "String",
-  "StringConstructor",
-  "Number",
-  "CallableFunction",
-];
+
 const functionNames = Array.from(functionHooks.keys());
 const matchFunctions = `/${functionNames.join("|")}/`;
 
@@ -66,6 +51,18 @@ const isVarInScope = (name: string, scope: Scope.Scope): boolean => {
     return false;
   }
   return isVarInScope(name, scope.upper);
+};
+
+const WORKLET = "worklet";
+const URI_PREFIX = "/node_modules/";
+const getModuleURI = (n: Node | undefined): string => {
+  if (n === undefined) {
+    return "";
+  } else if (isSourceFile(n)) {
+    const start = n.fileName.indexOf(URI_PREFIX) + URI_PREFIX.length;
+    return n.fileName.substring(start);
+  }
+  return getModuleURI(n.parent);
 };
 
 export default createRule<Options, MessageIds>({
@@ -93,17 +90,21 @@ export default createRule<Options, MessageIds>({
     const calleeIsWorklet = (tsNode: CallExpression) => {
       const signature = checker.getResolvedSignature(tsNode);
       const decl = signature?.declaration;
-      if (decl !== undefined && isFunctionTypeNode(decl)) {
-        const { parent } = decl;
+      const uri = getModuleURI(decl);
+      if (
+        decl !== undefined &&
+        (isFunctionTypeNode(decl) || isMethodSignature(decl))
+      ) {
         if (
-          isFunctionDeclaration(parent) &&
-          parent.name?.getText() === "createWorklet"
+          uri === "react-native-reanimated/react-native-reanimated.d.ts" ||
+          uri.startsWith("typescript/")
         ) {
           return true;
         }
-        const tags = getJSDocTags(decl.parent);
+        const { parent } = decl;
+        const tags = getJSDocTags(parent);
         return (
-          tags.filter((tag) => tag.tagName.getText() === "worklet").length > 0
+          tags.filter((tag) => tag.tagName.getText() === WORKLET).length > 0
         );
       } else if (
         decl !== undefined &&
@@ -115,7 +116,7 @@ export default createRule<Options, MessageIds>({
             return (
               statement.expression
                 .getText()
-                .substring(1, "worklet".length + 1) === "worklet"
+                .substring(1, WORKLET.length + 1) === WORKLET
             );
           }
         }
@@ -134,7 +135,7 @@ export default createRule<Options, MessageIds>({
           node.body.type === "BlockStatement" &&
           node.body.body.length > 0 &&
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (node.body.body as any[])[0]?.directive === "worklet"
+          (node.body.body as any[])[0]?.directive === WORKLET
         ) {
           currentCodePath = codePath.id;
           callerIsWorklet = true;
@@ -170,13 +171,6 @@ export default createRule<Options, MessageIds>({
             return;
           }
           if (
-            declaration &&
-            isMethodSignature(declaration) &&
-            isInterfaceDeclaration(declaration.parent) &&
-            builtInFunctions.indexOf(declaration.parent.name.getText()) !== -1
-          ) {
-            return;
-          } else if (
             declaration &&
             isFunctionTypeNode(declaration) &&
             isFunctionDeclaration(declaration.parent) &&
