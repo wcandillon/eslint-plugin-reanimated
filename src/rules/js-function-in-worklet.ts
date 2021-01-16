@@ -87,7 +87,7 @@ export default createRule<Options, MessageIds>({
         ) {
           return true;
         }
-        const tags = getJSDocTags(decl);
+        const tags = getJSDocTags(decl.parent);
         return (
           tags.filter((tag) => tag.tagName.getText() === "worklet").length > 0
         );

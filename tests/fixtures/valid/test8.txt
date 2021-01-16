@@ -1,0 +1,12 @@
+
+/**
+ * @worklet
+ */
+export type AnimationRunner = (
+) => void;
+ 
+const run: AnimationRunner;
+
+const style = useAnimatedStyle(() => {
+  run();
+});
