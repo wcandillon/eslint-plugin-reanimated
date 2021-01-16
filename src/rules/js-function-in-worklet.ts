@@ -48,6 +48,7 @@ const builtInFunctions = [
   "String",
   "StringConstructor",
   "Number",
+  "CallableFunction",
 ];
 const functionNames = Array.from(functionHooks.keys());
 const matchFunctions = `/${functionNames.join("|")}/`;
