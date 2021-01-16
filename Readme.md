@@ -6,17 +6,15 @@ This plugin requires your project to use TypeScript (>=4.1.3).
 
 # Example Configuration
 
-The parserOptions is mandatory to resolve types.
+The plugin relies on TypeScript compiler services to resolve types.
+You need to set your `tsconfig.json` file in your eslint configuration via `parserOptions`.
 
 ```json
 {
   "extends": "react-native-wcandillon",
   "plugins": ["reanimated"],
   "parserOptions": {
-    "project": "./tsconfig.json",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+    "project": "./tsconfig.json"
   },
   "rules": {
     "reanimated/js-function-in-worklet": 2,
