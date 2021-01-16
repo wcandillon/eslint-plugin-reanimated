@@ -10,7 +10,6 @@ import {
   isMethodSignature,
   isModuleBlock,
   isInterfaceDeclaration,
-  isTypeNode,
 } from "typescript";
 export type Options = [];
 export type MessageIds = "JSFunctionInWorkletMessage";
