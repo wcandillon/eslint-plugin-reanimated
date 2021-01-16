@@ -11,7 +11,6 @@ import {
   isArrowFunction,
   isMethodSignature,
   isModuleBlock,
-  isInterfaceDeclaration,
   isSourceFile,
 } from "typescript";
 export type Options = [];
@@ -36,23 +35,6 @@ const functionHooks = new Map([
   ["withRepeat", [3]],
 ]);
 
-const builtInFunctions = [
-  "Array",
-  "ArrayConstructor",
-  "Date",
-  "DateConstructor",
-  "Function",
-  "Math",
-  "NumberConstructor",
-  "ObjectConstructor",
-  "ReadonlyArray",
-  "RegExp",
-  "RegExpConstructor",
-  "String",
-  "StringConstructor",
-  "Number",
-  "CallableFunction",
-];
 const functionNames = Array.from(functionHooks.keys());
 const matchFunctions = `/${functionNames.join("|")}/`;
 
@@ -113,11 +95,14 @@ export default createRule<Options, MessageIds>({
         decl !== undefined &&
         (isFunctionTypeNode(decl) || isMethodSignature(decl))
       ) {
-        const { parent } = decl;
-        const tags = getJSDocTags(parent);
-        if (uri === "react-native-reanimated/react-native-reanimated.d.ts") {
+        if (
+          uri === "react-native-reanimated/react-native-reanimated.d.ts" ||
+          uri.startsWith("typescript/")
+        ) {
           return true;
         }
+        const { parent } = decl;
+        const tags = getJSDocTags(parent);
         return (
           tags.filter((tag) => tag.tagName.getText() === WORKLET).length > 0
         );
@@ -186,13 +171,6 @@ export default createRule<Options, MessageIds>({
             return;
           }
           if (
-            declaration &&
-            isMethodSignature(declaration) &&
-            isInterfaceDeclaration(declaration.parent) &&
-            builtInFunctions.indexOf(declaration.parent.name.getText()) !== -1
-          ) {
-            return;
-          } else if (
             declaration &&
             isFunctionTypeNode(declaration) &&
             isFunctionDeclaration(declaration.parent) &&
