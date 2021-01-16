@@ -145,42 +145,41 @@ export default createRule<Options, MessageIds>({
         callerIsWorklet = false;
       },
       CallExpression: (node) => {
-        const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
-        const { expression } = tsNode;
-        const name = expression.getText();
-        const signature = checker.getResolvedSignature(tsNode);
-        const declaration = signature?.declaration;
-        const { variables } = context.getScope();
-        if (variables.find((v) => v.name === name) !== undefined) {
-          return;
-        }
-        if (
-          declaration &&
-          isMethodSignature(declaration) &&
-          isInterfaceDeclaration(declaration.parent) &&
-          builtInFunctions.indexOf(declaration.parent.name.getText()) !== -1
-        ) {
-          return;
-        } else if (
-          declaration &&
-          isFunctionTypeNode(declaration) &&
-          isFunctionDeclaration(declaration.parent) &&
-          isModuleBlock(declaration.parent.parent) &&
-          declaration.parent.parent.parent.name.getText() === "Animated"
-        ) {
-          return;
-        } else if (
-          declaration &&
-          isFunctionDeclaration(declaration) &&
-          isModuleBlock(declaration.parent) &&
-          declaration.parent.parent.name.getText() === "Animated"
-        ) {
-          return;
-        } else if (declaration === undefined) {
-          return;
-        }
-
         if (callerIsWorklet) {
+          const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
+          const { expression } = tsNode;
+          const name = expression.getText();
+          const signature = checker.getResolvedSignature(tsNode);
+          const declaration = signature?.declaration;
+          const { variables } = context.getScope();
+          if (variables.find((v) => v.name === name) !== undefined) {
+            return;
+          }
+          if (
+            declaration &&
+            isMethodSignature(declaration) &&
+            isInterfaceDeclaration(declaration.parent) &&
+            builtInFunctions.indexOf(declaration.parent.name.getText()) !== -1
+          ) {
+            return;
+          } else if (
+            declaration &&
+            isFunctionTypeNode(declaration) &&
+            isFunctionDeclaration(declaration.parent) &&
+            isModuleBlock(declaration.parent.parent) &&
+            declaration.parent.parent.parent.name.getText() === "Animated"
+          ) {
+            return;
+          } else if (
+            declaration &&
+            isFunctionDeclaration(declaration) &&
+            isModuleBlock(declaration.parent) &&
+            declaration.parent.parent.name.getText() === "Animated"
+          ) {
+            return;
+          } else if (declaration === undefined) {
+            return;
+          }
           if (!calleeIsWorklet(tsNode)) {
             context.report({
               messageId: "JSFunctionInWorkletMessage",
