@@ -46,6 +46,7 @@ const builtInFunctions = [
   "RegExpConstructor",
   "String",
   "StringConstructor",
+  "Number",
 ];
 const functionNames = Array.from(functionHooks.keys());
 const matchFunctions = `/${functionNames.join("|")}/`;
@@ -149,6 +150,10 @@ export default createRule<Options, MessageIds>({
         const name = expression.getText();
         const signature = checker.getResolvedSignature(tsNode);
         const declaration = signature?.declaration;
+        const { variables } = context.getScope();
+        if (variables.find((v) => v.name === name) !== undefined) {
+          return;
+        }
         if (
           declaration &&
           isMethodSignature(declaration) &&
