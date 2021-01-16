@@ -15,7 +15,7 @@ export type Options = [];
 export type MessageIds = "JSFunctionInWorkletMessage";
 
 const createRule = ESLintUtils.RuleCreator((name) => {
-  return `https://github.com/wcandillon/eslint-plugin-reanimated/blob/master/rules/${name}.md`;
+  return `https://github.com/wcandillon/eslint-plugin-reanimated/blob/master/docs/${name}.md`;
 });
 
 const functionHooks = new Map([
