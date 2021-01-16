@@ -1,0 +1,23 @@
+function fn() {
+  return true;
+}
+
+function foo() {
+  "worklet";
+  return true;
+}
+
+const test = (
+) => {
+  "worklet";
+  const test = () => {
+    const bar = () => true;
+    if (Math.random()) {
+      foo();
+      bar();
+    }
+  }
+  if (Math.random()) {
+    fn();
+  }
+};

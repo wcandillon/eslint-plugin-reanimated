@@ -38,7 +38,9 @@ const test = (
 ) => {
   "worklet";
   const fn = () => true;
-  fn();
+  if (Math.random()) {
+    fn();
+  }
 };
 
 const Label = ({ point }: LabelProps) => {

@@ -1,4 +1,5 @@
 import { ESLintUtils } from "@typescript-eslint/experimental-utils";
+import { Scope } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
 import {
   isFunctionDeclaration,
   isBlock,
@@ -47,12 +48,25 @@ const builtInFunctions = [
   "String",
   "StringConstructor",
   "Number",
+  "CallableFunction",
 ];
 const functionNames = Array.from(functionHooks.keys());
 const matchFunctions = `/${functionNames.join("|")}/`;
 
 const JSFunctionInWorkletMessage =
   "{{name}} is not a worklet. Use runOnJS instead.";
+
+const isVarInScope = (name: string, scope: Scope.Scope): boolean => {
+  const { variables } = scope;
+  if (variables.find((v) => v.name === name) !== undefined) {
+    return true;
+  } else if (scope.type === "function") {
+    return false;
+  } else if (scope.upper === null) {
+    return false;
+  }
+  return isVarInScope(name, scope.upper);
+};
 
 export default createRule<Options, MessageIds>({
   name: "js-function-in-worklet",
@@ -151,8 +165,8 @@ export default createRule<Options, MessageIds>({
           const name = expression.getText();
           const signature = checker.getResolvedSignature(tsNode);
           const declaration = signature?.declaration;
-          const { variables } = context.getScope();
-          if (variables.find((v) => v.name === name) !== undefined) {
+          const inScope = isVarInScope(name, context.getScope());
+          if (inScope) {
             return;
           }
           if (
