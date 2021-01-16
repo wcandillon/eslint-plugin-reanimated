@@ -10,6 +10,8 @@ This plugin requires your project to use TypeScript (>=4.1.3).
 yarn add eslint-plugin-reanimated --dev
 ```
 
+External type declaration need to expose the `@worklet` JSDoc. In the case of `react-native-redash` for instance, this is done starting version `16.0.6`.
+
 ## Example Configuration
 
 The plugin relies on TypeScript compiler services to resolve types.
