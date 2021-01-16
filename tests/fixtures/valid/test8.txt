@@ -1,0 +1,22 @@
+
+/**
+ * @worklet
+ */
+export type AnimationRunner = (
+  setup: number,
+  work: number,
+  previous: AnimationState,
+  current: Animated.SharedValue<AnimationState>,
+) => void;
+ 
+const run: AnimationRunner;
+
+const style = useAnimatedStyle(() => {
+  run(setup.value, work.value, previous.value, current);
+  const {translateX, scaleX, opacity, backgroundColor} = current.value;
+  return {
+    transform: [{translateX}, {scaleX}],
+    opacity,
+    backgroundColor,
+  };
+});
