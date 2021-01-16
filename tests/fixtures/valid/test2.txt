@@ -2,6 +2,6 @@ import {mix} from "react-native-redash";
 
 useAnimatedStyle(() => {
   mix(1, 0, 1);
-  const m = mix.bind(null, progress.value);
-  m(0, 1)
+  // const m = mix.bind(null, progress.value);
+  // m(0, 1)
 });
