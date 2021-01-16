@@ -23,3 +23,6 @@ You need to set your `tsconfig.json` file in your eslint configuration via `pars
   }
 }
 ```
+
+## Rules
+* [js-function-in-worklet](https://github.com/wcandillon/eslint-plugin-reanimated/blob/master/docs/js-function-in-worklet.md)
