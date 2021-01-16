@@ -104,5 +104,16 @@ ruleTester.run("js-function-in-worklet", rule, {
         },
       ],
     },
+    {
+      code: code("fixtures/invalid/test7.txt"),
+      errors: [
+        {
+          messageId: "JSFunctionInWorkletMessage",
+          data: {
+            name: "run",
+          },
+        },
+      ],
+    },
   ],
 });
