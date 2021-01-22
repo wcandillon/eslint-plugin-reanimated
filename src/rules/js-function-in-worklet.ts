@@ -110,6 +110,9 @@ export default createRule<Options, MessageIds>({
         decl !== undefined &&
         (isFunctionDeclaration(decl) || isArrowFunction(decl))
       ) {
+        if (uri.startsWith("typescript/")) {
+          return true;
+        }
         if (decl.body && isBlock(decl.body)) {
           const [statement] = decl.body.statements;
           if (statement && isExpressionStatement(statement)) {
