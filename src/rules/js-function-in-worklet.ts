@@ -97,7 +97,8 @@ export default createRule<Options, MessageIds>({
       ) {
         if (
           uri === "react-native-reanimated/react-native-reanimated.d.ts" ||
-          uri.startsWith("typescript/")
+          uri.startsWith("typescript/") ||
+          uri === "@types/node/console.d.ts"
         ) {
           return true;
         }
