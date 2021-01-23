@@ -31,3 +31,17 @@ const bar = (cb: () => void) => {
   fn();
 }
 ```
+
+External modules like redash can mark worklets in their type declaration using the `@worklet` JSDoc tag.
+For instance:
+
+```ts
+/**
+ * Linear interpolation
+ * @param value
+ * @param x
+ * @param y
+ * @worklet
+ */
+export declare const mix: (value: number, x: number, y: number) => number;
+```
