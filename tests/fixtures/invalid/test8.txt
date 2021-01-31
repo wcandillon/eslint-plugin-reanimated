@@ -7,8 +7,7 @@ function foo() {
   return true;
 }
 
-const test = (
-) => {
+const test = () => {
   "worklet";
   const test = () => {
     const bar = () => true;
@@ -23,6 +22,7 @@ const test = (
 };
 
 const bar = () => {
+  "worklet";
   const {x} = { x: 1 };
   clamp(1, ...[1, 2]);
 }

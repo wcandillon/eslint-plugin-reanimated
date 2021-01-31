@@ -1,25 +1,11 @@
 import { ESLintUtils } from "@typescript-eslint/experimental-utils";
-import { Scope } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
-import {
-  Node,
-  isFunctionDeclaration,
-  isBlock,
-  isExpressionStatement,
-  CallExpression,
-  isFunctionTypeNode,
-  getJSDocTags,
-  isArrowFunction,
-  isMethodSignature,
-  isModuleBlock,
-  isSourceFile,
-} from "typescript";
 
 import { createState, detectWorklet } from "./common";
 export type Options = [];
 export type MessageIds = "UnsupportedSyntaxMessage";
 
 const UnsupportedSyntaxMessage =
-  "{{name}} is not a supported syntax in an Array.";
+  "{{name}} is not a supported syntax within a worklet.";
 
 const createRule = ESLintUtils.RuleCreator((name) => {
   return `https://github.com/wcandillon/eslint-plugin-reanimated/blob/master/docs/${name}.md`;
@@ -45,6 +31,28 @@ export default createRule<Options, MessageIds>({
     const state = createState();
     return {
       ...detectWorklet(state),
+      ObjectPattern: (node) => {
+        if (state.callerIsWorklet) {
+          context.report({
+            messageId: "UnsupportedSyntaxMessage",
+            node,
+            data: {
+              name: "Object destructuring",
+            },
+          });
+        }
+      },
+      SpreadElement: (node) => {
+        if (state.callerIsWorklet) {
+          context.report({
+            messageId: "UnsupportedSyntaxMessage",
+            node,
+            data: {
+              name: "The spread operator",
+            },
+          });
+        }
+      },
     };
   },
 });

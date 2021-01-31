@@ -27,5 +27,23 @@ const valid = files.map((file) => ({
 
 ruleTester.run("unsupported-syntax", rule, {
   valid,
-  invalid: [],
+  invalid: [
+    {
+      code: code("fixtures/invalid/test8.txt"),
+      errors: [
+        {
+          messageId: "UnsupportedSyntaxMessage",
+          data: {
+            name: "Object destructuring",
+          },
+        },
+        {
+          messageId: "UnsupportedSyntaxMessage",
+          data: {
+            name: "The spread operator",
+          },
+        },
+      ],
+    },
+  ],
 });
