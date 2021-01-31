@@ -9,8 +9,5 @@ const bar = () => {
   "worklet";
   const {x} = { x: 1 };
   clamp(1, ...[1, 2]);
-  for(const foo of [1, 2, 3]) {
-    console.log({ foo });
-  }
 }
 ```

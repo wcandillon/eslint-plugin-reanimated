@@ -31,6 +31,28 @@ export default createRule<Options, MessageIds>({
     const state = createState();
     return {
       ...detectWorklet(state),
+      ForOfStatement: (node) => {
+        if (state.callerIsWorklet) {
+          context.report({
+            messageId: "UnsupportedSyntaxMessage",
+            node,
+            data: {
+              name: "for in/of",
+            },
+          });
+        }
+      },
+      ForInStatement: (node) => {
+        if (state.callerIsWorklet) {
+          context.report({
+            messageId: "UnsupportedSyntaxMessage",
+            node,
+            data: {
+              name: "for in/of",
+            },
+          });
+        }
+      },
       ObjectPattern: (node) => {
         if (state.callerIsWorklet) {
           context.report({

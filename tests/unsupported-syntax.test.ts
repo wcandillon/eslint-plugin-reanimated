@@ -43,6 +43,18 @@ ruleTester.run("unsupported-syntax", rule, {
             name: "The spread operator",
           },
         },
+        {
+          messageId: "UnsupportedSyntaxMessage",
+          data: {
+            name: "for in/of",
+          },
+        },
+        {
+          messageId: "UnsupportedSyntaxMessage",
+          data: {
+            name: "for in/of",
+          },
+        },
       ],
     },
   ],
