@@ -21,3 +21,8 @@ const test = (
     fn();
   }
 };
+
+const bar = () => {
+  const {x} = { x: 1 };
+  clamp(1, ...[1, 2]);
+}
