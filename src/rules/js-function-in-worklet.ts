@@ -22,27 +22,6 @@ const createRule = ESLintUtils.RuleCreator((name) => {
   return `https://github.com/wcandillon/eslint-plugin-reanimated/blob/master/docs/${name}.md`;
 });
 
-<<<<<<< HEAD
-=======
-const functionHooks = new Map([
-  ["useAnimatedStyle", [0]],
-  ["useAnimatedProps", [0]],
-  ["useDerivedValue", [0]],
-  ["useAnimatedScrollHandler", [0]],
-  ["useAnimatedReaction", [0, 1]],
-  ["useWorkletCallback", [0]],
-  ["createWorklet", [0]],
-  // animations' callbacks
-  ["withTiming", [2]],
-  ["withSpring", [2]],
-  ["withDecay", [1]],
-  ["withRepeat", [3]],
-]);
-
-const functionNames = Array.from(functionHooks.keys());
-const matchFunctions = `/${functionNames.join("|")}/`;
-
->>>>>>> 06e5ca8b5a4698583b9823bdfd200fae7360298f
 const JSFunctionInWorkletMessage =
   "{{name}} is not a worklet. Use runOnJS instead.";
 
@@ -58,10 +37,6 @@ const isVarInScope = (name: string, scope: Scope.Scope): boolean => {
   return isVarInScope(name, scope.upper);
 };
 
-<<<<<<< HEAD
-=======
-const WORKLET = "worklet";
->>>>>>> 06e5ca8b5a4698583b9823bdfd200fae7360298f
 const URI_PREFIX = "/node_modules/";
 const getModuleURI = (n: Node | undefined): string => {
   if (n === undefined) {
@@ -105,12 +80,8 @@ export default createRule<Options, MessageIds>({
       ) {
         if (
           uri === "react-native-reanimated/react-native-reanimated.d.ts" ||
-<<<<<<< HEAD
           uri.startsWith("typescript/") ||
           uri === "@types/node/console.d.ts"
-=======
-          uri.startsWith("typescript/")
->>>>>>> 06e5ca8b5a4698583b9823bdfd200fae7360298f
         ) {
           return true;
         }
