@@ -6,9 +6,10 @@ function camelToUnderscore(key: string) {
 }
 
 describe('eslint-plugin ("./src/index.ts")', () => {
-  const ruleKeys = Object.keys({ jsFunctionInWorklet: true }).map((rule) =>
-    camelToUnderscore(rule)
-  );
+  const ruleKeys = Object.keys({
+    jsFunctionInWorklet: true,
+    unsupportedSyntax: true,
+  }).map((rule) => camelToUnderscore(rule));
   const eslintPluginRuleKeys = Object.keys(rules);
 
   it("exports all available rules", () => {

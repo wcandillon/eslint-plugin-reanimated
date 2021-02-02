@@ -13,30 +13,14 @@ import {
   isModuleBlock,
   isSourceFile,
 } from "typescript";
+
+import { createState, detectWorklet, WORKLET } from "./common";
 export type Options = [];
 export type MessageIds = "JSFunctionInWorkletMessage";
 
 const createRule = ESLintUtils.RuleCreator((name) => {
   return `https://github.com/wcandillon/eslint-plugin-reanimated/blob/master/docs/${name}.md`;
 });
-
-const functionHooks = new Map([
-  ["useAnimatedStyle", [0]],
-  ["useAnimatedProps", [0]],
-  ["useDerivedValue", [0]],
-  ["useAnimatedScrollHandler", [0]],
-  ["useAnimatedReaction", [0, 1]],
-  ["useWorkletCallback", [0]],
-  ["createWorklet", [0]],
-  // animations' callbacks
-  ["withTiming", [2]],
-  ["withSpring", [2]],
-  ["withDecay", [1]],
-  ["withRepeat", [3]],
-]);
-
-const functionNames = Array.from(functionHooks.keys());
-const matchFunctions = `/${functionNames.join("|")}/`;
 
 const JSFunctionInWorkletMessage =
   "{{name}} is not a worklet. Use runOnJS instead.";
@@ -53,7 +37,6 @@ const isVarInScope = (name: string, scope: Scope.Scope): boolean => {
   return isVarInScope(name, scope.upper);
 };
 
-const WORKLET = "worklet";
 const URI_PREFIX = "/node_modules/";
 const getModuleURI = (n: Node | undefined): string => {
   if (n === undefined) {
@@ -127,44 +110,11 @@ export default createRule<Options, MessageIds>({
       }
       return false;
     };
-    let currentCodePath: string | null = null;
-    let callerIsWorklet = false;
+    const state = createState();
     return {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      onCodePathStart: (...args: any[]) => {
-        const [codePath, node] = args;
-        if (
-          (node.type === "ArrowFunctionExpression" ||
-            node.type === "FunctionDeclaration") &&
-          node.body.type === "BlockStatement" &&
-          node.body.body.length > 0 &&
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (node.body.body as any[])[0]?.directive === WORKLET
-        ) {
-          currentCodePath = codePath.id;
-          callerIsWorklet = true;
-        }
-      },
-      onCodePathEnd: (codePath: { id: string }) => {
-        if (codePath.id === currentCodePath) {
-          currentCodePath = null;
-          callerIsWorklet = false;
-        }
-      },
-      ["CallExpression[callee.name='useAnimatedGestureHandler'] > ObjectExpression"]: () => {
-        callerIsWorklet = true;
-      },
-      ["CallExpression[callee.name='useAnimatedGestureHandler'] > ObjectExpression:exit"]: () => {
-        callerIsWorklet = false;
-      },
-      [`CallExpression[callee.name=${matchFunctions}] > ArrowFunctionExpression`]: () => {
-        callerIsWorklet = true;
-      },
-      [`CallExpression[callee.name=${matchFunctions}] > ArrowFunctionExpression:exit`]: () => {
-        callerIsWorklet = false;
-      },
+      ...detectWorklet(state),
       CallExpression: (node) => {
-        if (callerIsWorklet) {
+        if (state.callerIsWorklet) {
           const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
           const { expression } = tsNode;
           const name = expression.getText();
