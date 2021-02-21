@@ -9,6 +9,7 @@ describe('eslint-plugin ("./src/index.ts")', () => {
   const ruleKeys = Object.keys({
     jsFunctionInWorklet: true,
     unsupportedSyntax: true,
+    noMultipleAnimatedStyleUsages: true,
   }).map((rule) => camelToUnderscore(rule));
   const eslintPluginRuleKeys = Object.keys(rules);
 
