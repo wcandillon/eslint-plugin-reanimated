@@ -45,5 +45,22 @@ ruleTester.run("no-multiple-animated-style-usages", rule, {
         },
       ],
     },
+    {
+      code: code("fixtures/invalid/multiple-animated-style-array.txt"),
+      errors: [
+        {
+          messageId: "NoMultipleAnimatedStyleUsagesMessage",
+          data: {
+            name: "style",
+          },
+        },
+        {
+          messageId: "NoMultipleAnimatedStyleUsagesMessage",
+          data: {
+            name: "style",
+          },
+        },
+      ],
+    },
   ],
 });
