@@ -45,8 +45,22 @@ export default createRule<Options, MessageIds>({
   },
   defaultOptions: [],
   create: (context) => {
+    const checkIdentifier = (node: TSESTree.Identifier) => {
+      const variable = getVariableInScope(node.name, context.getScope());
+      const definition = variable?.defs?.[0];
+      if (!definition) {
+        return;
+      }
+      if (!definedAnimatedStyles.has(definition)) {
+        return;
+      }
+      const existingIdentifiers = styleDefinitions.get(definition) ?? [];
+      styleDefinitions.set(definition, [...existingIdentifiers, node]);
+    };
+
     const definedAnimatedStyles = new Set<Scope.Definition>();
     const styleDefinitions = new Map<Scope.Definition, TSESTree.Identifier[]>();
+
     return {
       "CallExpression[callee.name='useAnimatedStyle']": (
         node: TSESTree.CallExpression
@@ -62,20 +76,8 @@ export default createRule<Options, MessageIds>({
         }
         definedAnimatedStyles.add(definition);
       },
-      "JSXAttribute[name.name='style'] Identifier": (
-        node: TSESTree.Identifier
-      ) => {
-        const variable = getVariableInScope(node.name, context.getScope());
-        const definition = variable?.defs?.[0];
-        if (!definition) {
-          return;
-        }
-        if (!definedAnimatedStyles.has(definition)) {
-          return;
-        }
-        const existingIdentifiers = styleDefinitions.get(definition) ?? [];
-        styleDefinitions.set(definition, [...existingIdentifiers, node]);
-      },
+      "JSXAttribute[name.name='style'] > JSXExpressionContainer > Identifier": checkIdentifier,
+      "JSXAttribute[name.name='style'] > JSXExpressionContainer > ArrayExpression > Identifier": checkIdentifier,
       "Program:exit": () => {
         for (const [, identifiers] of styleDefinitions) {
           if (identifiers.length < 2) {
