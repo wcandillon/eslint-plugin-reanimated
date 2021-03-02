@@ -24,6 +24,7 @@ const OtherComponent = () => {
   )
 }
 
+/*
 const AddPageIndicator = ({selectedPage, index}: Props) => {
   const {colors} = useTheme();
   const style = useAnimatedStyle(() => ({
@@ -36,3 +37,4 @@ const AddPageIndicator = ({selectedPage, index}: Props) => {
     </View>
   );
 };
+*/

@@ -53,6 +53,7 @@ export default createRule<Options, MessageIds>({
           });
         }
       },
+      /*
       ObjectPattern: (node) => {
         if (state.callerIsWorklet) {
           context.report({
@@ -64,6 +65,7 @@ export default createRule<Options, MessageIds>({
           });
         }
       },
+      */
       SpreadElement: (node) => {
         if (state.callerIsWorklet) {
           context.report({

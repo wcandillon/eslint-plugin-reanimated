@@ -34,12 +34,6 @@ ruleTester.run("unsupported-syntax", rule, {
         {
           messageId: "UnsupportedSyntaxMessage",
           data: {
-            name: "Object destructuring",
-          },
-        },
-        {
-          messageId: "UnsupportedSyntaxMessage",
-          data: {
             name: "The spread operator",
           },
         },
