@@ -12,22 +12,6 @@ const createRule = ESLintUtils.RuleCreator((name) => {
 const NoMultipleAnimatedStyleUsagesMessage =
   "{{name}} cannot be used multiple times. Use separate useAnimatedStyle() calls instead.";
 
-const getVariableInScope = (
-  name: string,
-  scope: Scope.Scope
-): Scope.Variable | undefined => {
-  const { variables } = scope;
-  const variable = variables.find((v) => v.name === name);
-  if (variable !== undefined) {
-    return variable;
-  } else if (scope.type === "function") {
-    return undefined;
-  } else if (scope.upper === null) {
-    return undefined;
-  }
-  return getVariableInScope(name, scope.upper);
-};
-
 export default createRule<Options, MessageIds>({
   name: "no-multiple-animated-style-usages",
   meta: {
@@ -45,21 +29,25 @@ export default createRule<Options, MessageIds>({
   },
   defaultOptions: [],
   create: (context) => {
+    const animatedStyleReferences = new Map<
+      Scope.Variable,
+      TSESTree.Identifier[]
+    >();
     const checkIdentifier = (node: TSESTree.Identifier) => {
-      const variable = getVariableInScope(node.name, context.getScope());
-      const definition = variable?.defs?.[0];
-      if (!definition) {
+      const found = Array.from(
+        animatedStyleReferences.keys()
+      ).find(({ references }) =>
+        references.map(({ identifier }) => identifier).includes(node)
+      );
+      if (!found) {
         return;
       }
-      if (!definedAnimatedStyles.has(definition)) {
-        return;
-      }
-      const existingIdentifiers = styleDefinitions.get(definition) ?? [];
-      styleDefinitions.set(definition, [...existingIdentifiers, node]);
+      animatedStyleReferences.set(
+        found,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        [...animatedStyleReferences.get(found)!, node]
+      );
     };
-
-    const definedAnimatedStyles = new Set<Scope.Definition>();
-    const styleDefinitions = new Map<Scope.Definition, TSESTree.Identifier[]>();
 
     return {
       "CallExpression[callee.name='useAnimatedStyle']": (
@@ -70,16 +58,15 @@ export default createRule<Options, MessageIds>({
           return;
         }
         const declaredVariables = context.getDeclaredVariables(parent);
-        const definition = declaredVariables[0]?.defs?.[0];
-        if (!definition) {
+        const [variable] = declaredVariables;
+        if (!variable) {
           return;
         }
-        definedAnimatedStyles.add(definition);
+        animatedStyleReferences.set(variable, []);
       },
-      "JSXAttribute[name.name='style'] > JSXExpressionContainer > Identifier": checkIdentifier,
-      "JSXAttribute[name.name='style'] > JSXExpressionContainer > ArrayExpression > Identifier": checkIdentifier,
+      "JSXAttribute Identifier": checkIdentifier,
       "Program:exit": () => {
-        for (const [, identifiers] of styleDefinitions) {
+        for (const [, identifiers] of animatedStyleReferences) {
           if (identifiers.length < 2) {
             continue;
           }
