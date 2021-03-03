@@ -12,7 +12,7 @@ const Component = () => {
   return (
     <>
       <Animated.View style={style} />
-      <Animated.View textStyle={styles} />
+      <Animated.View style={styles} />
     </>
   )
 }
