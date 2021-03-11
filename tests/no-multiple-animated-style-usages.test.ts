@@ -62,5 +62,41 @@ ruleTester.run("no-multiple-animated-style-usages", rule, {
         },
       ],
     },
+    {
+      code: code("fixtures/invalid/multiple-animated-style-nested-props.txt"),
+      errors: [
+        {
+          messageId: "NoMultipleAnimatedStyleUsagesMessage",
+          data: {
+            name: "style",
+          },
+        },
+        {
+          messageId: "NoMultipleAnimatedStyleUsagesMessage",
+          data: {
+            name: "style",
+          },
+        },
+      ],
+    },
+    // {
+    //   code: code(
+    //     "fixtures/invalid/multiple-animated-style-precomposed-array.txt"
+    //   ),
+    //   errors: [
+    //     {
+    //       messageId: "NoMultipleAnimatedStyleUsagesMessage",
+    //       data: {
+    //         name: "style",
+    //       },
+    //     },
+    //     {
+    //       messageId: "NoMultipleAnimatedStyleUsagesMessage",
+    //       data: {
+    //         name: "style",
+    //       },
+    //     },
+    //   ],
+    // },
   ],
 });
