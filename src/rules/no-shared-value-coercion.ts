@@ -54,7 +54,7 @@ export default createRule<Options, MessageIds>({
       const typeString = checker.typeToString(
         checker.getTypeAtLocation(tsNode)
       );
-      if (!/\bSharedValue\b/.test(typeString)) {
+      if (!/\bSharedValue<.*>$/.test(typeString)) {
         return;
       }
 
