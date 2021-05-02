@@ -66,10 +66,11 @@ export default createRule<Options, MessageIds>({
   },
   defaultOptions: [],
   create: (context) => {
-    // const sourceCode = context.getSourceCode();
-    const parserServices = ESLintUtils.getParserServices(context);
+    const { parserServices } = context;
+    if (!parserServices?.hasFullTypeInformation) {
+      return {};
+    }
     const checker = parserServices.program.getTypeChecker();
-    // const compilerOptions = parserServices.program.getCompilerOptions();
     const calleeIsWorklet = (tsNode: CallExpression) => {
       const signature = checker.getResolvedSignature(tsNode);
       const decl = signature?.declaration;
