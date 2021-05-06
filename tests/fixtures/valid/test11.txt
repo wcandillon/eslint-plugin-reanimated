@@ -1,3 +1,5 @@
+import {useAnimatedStyle, interpolate} from "react-native-reanimated";
+
 const SIZE = 10;
 export const toPosition = (col: Col, row: Row) => {
   "worklet";
@@ -7,3 +9,26 @@ export const toPosition = (col: Col, row: Row) => {
     y: (8 - parseInt(row, 10)) * SIZE,
   };
 };
+
+const formatDatetime = (datetime: Date) => {
+  "worklet";
+  return `${datetime.getFullYear()}-${
+    datetime.getMonth() + 1
+  }-${datetime.getDate()} ${datetime.getHours()}:${datetime.getMinutes()}:${datetime.getSeconds()}`;
+};
+
+  const style = useAnimatedStyle(() => {
+    const opacity = interpolate(
+      progress.value,
+      [start, end],
+      [0.5, 1],
+      Extrapolate.CLAMP
+    );
+    const scale = interpolate(
+      progress.value,
+      [start, end],
+      [1, 1.5],
+      Extrapolate.CLAMP
+    );
+    return { opacity, transform: [{ scale }] };
+  });

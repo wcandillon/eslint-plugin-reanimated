@@ -1,0 +1,7 @@
+function foo() {
+  return true;
+}
+
+const props = useAnimatedProps(() => ({
+  foo: foo()
+});
