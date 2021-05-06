@@ -4,4 +4,4 @@ function foo() {
 
 const props = useAnimatedProps(() => ({
   foo: foo()
-});
+}));
