@@ -11,6 +11,7 @@ const Component = () => {
     <>
       <Animated.View style={style} />
       <Animated.View style={style} />
+      <Animated.View style={styles.style} />
     </>
   )
 }
