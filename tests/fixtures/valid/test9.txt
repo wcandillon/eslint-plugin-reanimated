@@ -184,3 +184,10 @@ export const t2length = (
 
   return t;
 };
+
+export const toPosition = ({ x, y }: Vector) => {
+  "worklet";
+  const col = String.fromCharCode(97 + Math.round(x / SIZE));
+  const row = `${8 - Math.round(y / SIZE)}`;
+  return `${col}${row}` as Position;
+};
