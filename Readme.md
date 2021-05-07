@@ -35,3 +35,4 @@ You need to set your `tsconfig.json` file in your eslint configuration via `pars
 * [js-function-in-worklet](./docs/js-function-in-worklet.md)
 * [unsupported-syntax](./docs/unsupported-syntax.md)
 * [no-multiple-animated-style-usages](./docs/no-multiple-animated-style-usages.md)
+* [no-shared-value-coercion](./docs/no-shared-value-coercion.md)

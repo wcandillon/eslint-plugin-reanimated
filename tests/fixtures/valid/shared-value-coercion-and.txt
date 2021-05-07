@@ -1,0 +1,16 @@
+import {useSharedValue, useDerivedValue} from 'react-native-reanimated'
+
+const Component: FC = () => {
+  const foo = useSharedValue('abc');
+
+  const bar = useDerivedValue(() => {
+    if (foo.value && true) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
+
+  return null;
+}
