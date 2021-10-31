@@ -122,6 +122,7 @@ export default createRule<Options, MessageIds>({
           const signature = checker.getResolvedSignature(tsNode);
           const declaration = signature?.declaration;
           const inScope = isVarInScope(name, context.getScope());
+          const uri = getModuleURI(declaration);
           if (inScope) {
             return;
           }
@@ -141,6 +142,12 @@ export default createRule<Options, MessageIds>({
           ) {
             return;
           } else if (declaration === undefined) {
+            return;
+          } else if (
+            uri === "react-native-reanimated/react-native-reanimated.d.ts" ||
+            uri.startsWith("typescript/") ||
+            uri === "@types/node/console.d.ts"
+          ) {
             return;
           }
           if (!calleeIsWorklet(tsNode)) {

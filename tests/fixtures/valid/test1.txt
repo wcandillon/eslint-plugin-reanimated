@@ -5,6 +5,7 @@ function bar() {
 
 const foo = () => {
   "worklet";
+  const val = Number("10");
   return false;
 }
 
