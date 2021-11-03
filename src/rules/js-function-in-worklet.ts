@@ -75,12 +75,7 @@ export default createRule<Options, MessageIds>({
       const signature = checker.getResolvedSignature(tsNode);
       const decl = signature?.declaration;
       const uri = getModuleURI(decl);
-      if (decl !== undefined && isFunctionDeclaration(decl)) {
-        const tags = getJSDocTags(decl);
-        return (
-          tags.filter((tag) => tag.tagName.getText() === WORKLET).length > 0
-        );
-      } else if (
+      if (
         decl !== undefined &&
         (isFunctionTypeNode(decl) || isMethodSignature(decl))
       ) {
@@ -112,6 +107,11 @@ export default createRule<Options, MessageIds>({
                 .substring(1, WORKLET.length + 1) === WORKLET
             );
           }
+        } else {
+          const tags = getJSDocTags(decl);
+          return (
+            tags.filter((tag) => tag.tagName.getText() === WORKLET).length > 0
+          );
         }
       }
       return false;
