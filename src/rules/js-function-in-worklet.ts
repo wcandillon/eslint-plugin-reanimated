@@ -107,6 +107,11 @@ export default createRule<Options, MessageIds>({
                 .substring(1, WORKLET.length + 1) === WORKLET
             );
           }
+        } else {
+          const tags = getJSDocTags(decl);
+          return (
+            tags.filter((tag) => tag.tagName.getText() === WORKLET).length > 0
+          );
         }
       }
       return false;
