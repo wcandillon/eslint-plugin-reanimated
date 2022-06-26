@@ -1,32 +1,41 @@
-name: CI & CD
+name: Tests
 on: [push]
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [12.x]
-
+    env:
+      WORKING_DIRECTORY: ./
+    concurrency:
+      group: npm-${{ github.ref }}
+      cancel-in-progress: true
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: GitHub Action for Yarn
-      uses: Borales/actions-yarn@v2.3.0
-    - name: yarn install, build, and test
-      run: |
-        yarn lint
-        yarn tsc
-        yarn test
-    - name: Deploy
-      if: github.ref == 'refs/heads/master'
-      run: npx semantic-release
-      env:
-        CI: true
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Setup Nodejs and npm
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Setup yarn
+        run: npm install -g yarn
+
+      - name: Setup Nodejs with yarn caching
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: yarn
+
+      - name: Install Package
+        run: yarn;
+
+      - name: Lint Package
+        run: yarn lint;
+
+      - name: TypeScript Package
+        run: yarn tsc;
+
+      - name: Run Package Unit tests
+        run: yarn test;

@@ -151,7 +151,10 @@ export default createRule<Options, MessageIds>({
           } else if (
             uri === "react-native-reanimated/react-native-reanimated.d.ts" ||
             uri.startsWith("typescript/") ||
-            uri === "@types/node/console.d.ts"
+            uri === "@types/node/console.d.ts" ||
+            uri.startsWith(
+              "@shopify/react-native-skia/lib/typescript/src/skia/types/"
+            )
           ) {
             return;
           }
