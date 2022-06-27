@@ -30,6 +30,7 @@ export const PerformanceDrawingTest = () => {
     (canvas) => {
       "worklet";
       const r = radius;
+      paint.setColor(Skia.Color("purple"));
       canvas.drawRect(Skia.XYWHRect(0, 0, r.current, r.current), paint);
     },
     [paint]

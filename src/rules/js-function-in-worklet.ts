@@ -154,7 +154,8 @@ export default createRule<Options, MessageIds>({
             uri === "@types/node/console.d.ts" ||
             uri.startsWith(
               "@shopify/react-native-skia/lib/typescript/src/skia/types/"
-            )
+            ) ||
+            uri.indexOf("react-native-skia/package/src/skia/types") !== -1
           ) {
             return;
           }
