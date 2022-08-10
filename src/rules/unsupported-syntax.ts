@@ -11,13 +11,13 @@ const createRule = ESLintUtils.RuleCreator((name) => {
   return `https://github.com/wcandillon/eslint-plugin-reanimated/blob/master/docs/${name}.md`;
 });
 
+// eslint-disable-next-line import/no-default-export
 export default createRule<Options, MessageIds>({
   name: "unsupported-syntax",
   meta: {
     type: "problem",
     docs: {
       description: "Some syntaxes are not a supported within a worklet.",
-      category: "Possible Errors",
       recommended: "error",
     },
     fixable: "code",
