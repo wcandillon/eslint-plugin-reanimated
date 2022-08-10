@@ -1,11 +1,10 @@
 import { ESLintUtils } from "@typescript-eslint/experimental-utils";
-import { Scope } from "@typescript-eslint/scope-manager";
+import type { Scope } from "@typescript-eslint/scope-manager";
+import type { Node, CallExpression } from "typescript";
 import {
-  Node,
   isFunctionDeclaration,
   isBlock,
   isExpressionStatement,
-  CallExpression,
   isFunctionTypeNode,
   getJSDocTags,
   isArrowFunction,
@@ -48,6 +47,7 @@ const getModuleURI = (n: Node | undefined): string => {
   return getModuleURI(n.parent);
 };
 
+// eslint-disable-next-line import/no-default-export
 export default createRule<Options, MessageIds>({
   name: "js-function-in-worklet",
   meta: {

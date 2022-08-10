@@ -8,4 +8,5 @@ const rules = {
   "no-multiple-animated-style-usages": noMultipleAnimatedStyleUsages,
 };
 
+// eslint-disable-next-line import/no-default-export
 export default rules;

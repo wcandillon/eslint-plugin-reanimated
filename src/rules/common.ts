@@ -65,9 +65,10 @@ export const detectWorklet = (state: State) => {
     [`CallExpression[callee.name=${matchObjects}] > ObjectExpression`]: () => {
       state.callerIsObjectHook = true;
     },
-    [`CallExpression[callee.name=${matchObjects}] > ObjectExpression:exit`]: () => {
-      state.callerIsObjectHook = false;
-    },
+    [`CallExpression[callee.name=${matchObjects}] > ObjectExpression:exit`]:
+      () => {
+        state.callerIsObjectHook = false;
+      },
     ["BlockStatement"]: () => {
       if (state.callerIsObjectHook) {
         state.callerIsWorklet = true;
@@ -78,11 +79,13 @@ export const detectWorklet = (state: State) => {
         state.callerIsWorklet = false;
       }
     },
-    [`CallExpression[callee.name=${matchFunctions}] > ArrowFunctionExpression`]: () => {
-      state.callerIsWorklet = true;
-    },
-    [`CallExpression[callee.name=${matchFunctions}] > ArrowFunctionExpression:exit`]: () => {
-      state.callerIsWorklet = false;
-    },
+    [`CallExpression[callee.name=${matchFunctions}] > ArrowFunctionExpression`]:
+      () => {
+        state.callerIsWorklet = true;
+      },
+    [`CallExpression[callee.name=${matchFunctions}] > ArrowFunctionExpression:exit`]:
+      () => {
+        state.callerIsWorklet = false;
+      },
   };
 };
