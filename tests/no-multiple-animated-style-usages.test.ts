@@ -28,57 +28,6 @@ const valid = files.map((file) => ({
 ruleTester.run("no-multiple-animated-style-usages", rule, {
   valid,
   invalid: [
-    {
-      code: code("fixtures/invalid/multiple-animated-style.txt"),
-      errors: [
-        {
-          messageId: "NoMultipleAnimatedStyleUsagesMessage",
-          data: {
-            name: "style",
-          },
-        },
-        {
-          messageId: "NoMultipleAnimatedStyleUsagesMessage",
-          data: {
-            name: "style",
-          },
-        },
-      ],
-    },
-    {
-      code: code("fixtures/invalid/multiple-animated-style-array.txt"),
-      errors: [
-        {
-          messageId: "NoMultipleAnimatedStyleUsagesMessage",
-          data: {
-            name: "style",
-          },
-        },
-        {
-          messageId: "NoMultipleAnimatedStyleUsagesMessage",
-          data: {
-            name: "style",
-          },
-        },
-      ],
-    },
-    {
-      code: code("fixtures/invalid/multiple-animated-style-nested-props.txt"),
-      errors: [
-        {
-          messageId: "NoMultipleAnimatedStyleUsagesMessage",
-          data: {
-            name: "style",
-          },
-        },
-        {
-          messageId: "NoMultipleAnimatedStyleUsagesMessage",
-          data: {
-            name: "style",
-          },
-        },
-      ],
-    },
     // {
     //   code: code(
     //     "fixtures/invalid/multiple-animated-style-precomposed-array.txt"

@@ -1,7 +1,7 @@
+import type { TSESTree } from "@typescript-eslint/experimental-utils";
 import { ESLintUtils } from "@typescript-eslint/experimental-utils";
-import { Scope } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
-import { TSESTree } from "@typescript-eslint/experimental-utils/dist/ts-estree";
-
+import type { CallExpression } from "typescript";
+import type { ESLintScopeVariable } from "@typescript-eslint/scope-manager";
 export type Options = [];
 export type MessageIds = "NoMultipleAnimatedStyleUsagesMessage";
 
@@ -12,6 +12,7 @@ const createRule = ESLintUtils.RuleCreator((name) => {
 const NoMultipleAnimatedStyleUsagesMessage =
   "{{name}} cannot be used multiple times. Use separate useAnimatedStyle() calls instead.";
 
+// eslint-disable-next-line import/no-default-export
 export default createRule<Options, MessageIds>({
   name: "no-multiple-animated-style-usages",
   meta: {
@@ -19,7 +20,6 @@ export default createRule<Options, MessageIds>({
     docs: {
       description:
         "Animated styles cannot be used multiple times. Call useAnimatedStyle() multiple times instead.",
-      category: "Possible Errors",
       recommended: "error",
     },
     schema: [],
@@ -30,34 +30,34 @@ export default createRule<Options, MessageIds>({
   defaultOptions: [],
   create: (context) => {
     const animatedStyleReferences = new Map<
-      Scope.Variable,
+      ESLintScopeVariable,
       TSESTree.Identifier[]
     >();
     const checkIdentifier = (node: TSESTree.Identifier) => {
-      const found = Array.from(
-        animatedStyleReferences.keys()
-      ).find(({ references }) =>
-        references.map(({ identifier }) => identifier).includes(node)
+      const found = Array.from(animatedStyleReferences.keys()).find(
+        ({ references }) =>
+          references.map(({ identifier }) => identifier).includes(node)
       );
       if (!found) {
         return;
       }
-      animatedStyleReferences.set(
-        found,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        [...animatedStyleReferences.get(found)!, node]
-      );
+      animatedStyleReferences.set(found, [
+        ...animatedStyleReferences.get(found)!,
+        node,
+      ]);
     };
 
     return {
       "CallExpression[callee.name='useAnimatedStyle']": (
-        node: TSESTree.CallExpression
+        node: CallExpression
       ) => {
         const { parent } = node;
         if (!parent) {
           return;
         }
-        const declaredVariables = context.getDeclaredVariables(parent);
+        const declaredVariables = context.getDeclaredVariables(
+          context.parserServices!.tsNodeToESTreeNodeMap.get(parent)
+        );
         const [variable] = declaredVariables;
         if (!variable) {
           return;

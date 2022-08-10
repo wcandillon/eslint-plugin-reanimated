@@ -1,5 +1,5 @@
 import { ESLintUtils } from "@typescript-eslint/experimental-utils";
-import { Scope } from "@typescript-eslint/experimental-utils/dist/ts-eslint";
+import { Scope } from "@typescript-eslint/scope-manager";
 import {
   Node,
   isFunctionDeclaration,
@@ -25,7 +25,7 @@ const createRule = ESLintUtils.RuleCreator((name) => {
 const JSFunctionInWorkletMessage =
   "{{name}} is not a worklet. Use runOnJS instead.";
 
-const isVarInScope = (name: string, scope: Scope.Scope): boolean => {
+const isVarInScope = (name: string, scope: Scope): boolean => {
   const { variables } = scope;
   if (variables.find((v) => v.name === name) !== undefined) {
     return true;
@@ -55,7 +55,6 @@ export default createRule<Options, MessageIds>({
     docs: {
       description:
         "non-worklet functions should be invoked via runOnJS. Use runOnJS() or workletlize instead.",
-      category: "Possible Errors",
       recommended: "error",
     },
     fixable: "code",
