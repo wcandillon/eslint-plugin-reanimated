@@ -79,7 +79,7 @@ export default createRule<Options, MessageIds>({
         (isFunctionTypeNode(decl) || isMethodSignature(decl))
       ) {
         if (
-          uri === "react-native-reanimated/react-native-reanimated.d.ts" ||
+          uri.startsWith("react-native-reanimated/") ||
           uri.startsWith("typescript/") ||
           uri === "@types/node/console.d.ts"
         ) {
@@ -148,7 +148,7 @@ export default createRule<Options, MessageIds>({
           } else if (declaration === undefined) {
             return;
           } else if (
-            uri === "react-native-reanimated/react-native-reanimated.d.ts" ||
+            uri.startsWith("react-native-reanimated/") ||
             uri.startsWith("typescript/") ||
             uri === "@types/node/console.d.ts" ||
             uri.startsWith(
