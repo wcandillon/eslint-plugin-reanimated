@@ -5,17 +5,19 @@ export interface State {
 }
 
 const functionHooks = new Map([
+  ["useFrameCallback", [0]],
   ["useAnimatedStyle", [0]],
   ["useAnimatedProps", [0]],
+  ["createAnimatedPropAdapter", [0]],
   ["useDerivedValue", [0]],
+  ["useAnimatedScrollHandler", [0]],
   ["useAnimatedReaction", [0, 1]],
   ["useWorkletCallback", [0]],
-  ["createWorklet", [0]],
-  // animations' callbacks
   ["withTiming", [2]],
   ["withSpring", [2]],
   ["withDecay", [1]],
   ["withRepeat", [3]],
+  ["runOnUI", [0]],
 ]);
 
 const objectHooks = new Set([
